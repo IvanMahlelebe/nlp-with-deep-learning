@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 
 """
+MODIFYER: Thibatsane I. Mahlelebe
+
 CS224N 2022-23: Homework 4
 utils.py: Utility Functions
 Pencheng Yin <pcyin@cs.cmu.edu>
@@ -36,6 +38,11 @@ def pad_sents(sents, pad_token):
 
     ### YOUR CODE HERE (~6 Lines)
 
+    max_len = max(len(sent) for sent in sents)
+    
+    for sent in sents:
+        padded_sent = sent + [pad_token] * (max_len - len(sent))
+        sents_padded.append(padded_sent)
 
     ### END YOUR CODE
 
