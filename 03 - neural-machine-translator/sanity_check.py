@@ -129,7 +129,8 @@ def question_1d_sanity_check(model, src_sents, tgt_sents, vocab):
     # Test
     with torch.no_grad():
         enc_hiddens_pred, dec_init_state_pred = model.encode(source_padded, source_lengths)
-    assert(enc_hiddens_target.shape == enc_hiddens_pred.shape), "enc_hiddens shape is incorrect: it should be:\n {} but is:\n{}".format(enc_hiddens_target.shape, enc_hiddens_pred.shape)
+    
+    assert(enc_hiddens_target.shape == enc_hiddens_pred.shape), f"enc_hiddens shape is incorrect: it should be:\n {enc_hiddens_target.shape} but is:\n{enc_hiddens_pred.shape}"
     assert(np.allclose(enc_hiddens_target.numpy(), enc_hiddens_pred.numpy())), "enc_hiddens is incorrect: it should be:\n {} but is:\n{}".format(enc_hiddens_target, enc_hiddens_pred)
     print("enc_hiddens Sanity Checks Passed!")
     assert(dec_init_state_target[0].shape == dec_init_state_pred[0].shape), "dec_init_state[0] shape is incorrect: it should be:\n {} but is:\n{}".format(dec_init_state_target[0].shape, dec_init_state_pred[0].shape)
@@ -165,8 +166,8 @@ def question_1e_sanity_check(model, src_sents, tgt_sents, vocab):
     reinitialize_layers(model)
     COUNTER = [0]
     def stepFunction(Ybar_t, dec_state, enc_hiddens, enc_hiddens_proj, enc_masks):
-       dec_state = torch.load('./sanity_check_en_es_data/step_dec_state_{}.pkl'.format(COUNTER[0]))
-       o_t = torch.load('./sanity_check_en_es_data/step_o_t_{}.pkl'.format(COUNTER[0]))
+       dec_state = torch.load(f'./sanity_check_en_es_data/step_dec_state_{COUNTER[0]}.pkl')
+       o_t = torch.load(f'./sanity_check_en_es_data/step_o_t_{COUNTER[0]}.pkl')
        COUNTER[0]+=1
        return dec_state, o_t, None
     model.step = stepFunction
@@ -174,8 +175,8 @@ def question_1e_sanity_check(model, src_sents, tgt_sents, vocab):
     # Run Tests
     with torch.no_grad():
         combined_outputs_pred = model.decode(enc_hiddens, enc_masks, dec_init_state, target_padded)
-    assert(combined_outputs_target.shape == combined_outputs_pred.shape), "combined_outputs shape is incorrect: it should be:\n {} but is:\n{}".format(combined_outputs_target.shape, combined_outputs_pred.shape)
-    assert(np.allclose(combined_outputs_pred.numpy(), combined_outputs_target.numpy())), "combined_outputs is incorrect: it should be:\n {} but is:\n{}".format(combined_outputs_target, combined_outputs_pred)
+    assert(combined_outputs_target.shape == combined_outputs_pred.shape), f"combined_outputs shape is incorrect: it should be:\n {combined_outputs_target.shape} but is:\n{combined_outputs_pred.shape}"
+    assert(np.allclose(combined_outputs_pred.numpy(), combined_outputs_target.numpy())), f"combined_outputs is incorrect: it should be:\n {combined_outputs_target} but is:\n{combined_outputs_pred}"
     print("combined_outputs Sanity Checks Passed!")
     print ("-"*80)
     print("All Sanity Checks Passed for Question 1e: Decode!")
