@@ -89,24 +89,24 @@ def generate_outputs(model, source, target, vocab):
         combined_outputs = model.decode(enc_hiddens, enc_masks, dec_init_state, target_padded)
 
     # Save Tensors to disk
-    torch.save(enc_hiddens, './sanity_check_en_es_data/enc_hiddens.pkl')
-    torch.save(dec_init_state, './sanity_check_en_es_data/dec_init_state.pkl') 
-    torch.save(enc_masks, './sanity_check_en_es_data/enc_masks.pkl')
-    torch.save(combined_outputs, './sanity_check_en_es_data/combined_outputs.pkl')
-    torch.save(target_padded, './sanity_check_en_es_data/target_padded.pkl')
+    torch.save(enc_hiddens, '../sanity_check_en_es_data/enc_hiddens.pkl')
+    torch.save(dec_init_state, '../sanity_check_en_es_data/dec_init_state.pkl') 
+    torch.save(enc_masks, '../sanity_check_en_es_data/enc_masks.pkl')
+    torch.save(combined_outputs, '../sanity_check_en_es_data/combined_outputs.pkl')
+    torch.save(target_padded, '../sanity_check_en_es_data/target_padded.pkl')
 
     # 1f
     # Inputs
-    Ybar_t = torch.load('./sanity_check_en_es_data/Ybar_t.pkl')
-    enc_hiddens_proj = torch.load('./sanity_check_en_es_data/enc_hiddens_proj.pkl')
+    Ybar_t = torch.load('../sanity_check_en_es_data/Ybar_t.pkl')
+    enc_hiddens_proj = torch.load('../sanity_check_en_es_data/enc_hiddens_proj.pkl')
     reinitialize_layers(model)
     # Run Tests
     with torch.no_grad():
         dec_state_target, o_t_target, e_t_target = model.step(Ybar_t, dec_init_state, enc_hiddens, enc_hiddens_proj,
                                                         enc_masks)
-    torch.save(dec_state_target, './sanity_check_en_es_data/dec_state.pkl')
-    torch.save(o_t_target, './sanity_check_en_es_data/o_t.pkl')
-    torch.save(e_t_target, './sanity_check_en_es_data/e_t.pkl')
+    torch.save(dec_state_target, '../sanity_check_en_es_data/dec_state.pkl')
+    torch.save(o_t_target, '../sanity_check_en_es_data/o_t.pkl')
+    torch.save(e_t_target, '../sanity_check_en_es_data/e_t.pkl')
 
     model.gen_sanity_check = False
 
@@ -123,8 +123,8 @@ def question_1d_sanity_check(model, src_sents, tgt_sents, vocab):
     source_padded = model.vocab.src.to_input_tensor(src_sents, device=model.device)
 
     # Load Outputs
-    enc_hiddens_target = torch.load('./sanity_check_en_es_data/enc_hiddens.pkl')
-    dec_init_state_target = torch.load('./sanity_check_en_es_data/dec_init_state.pkl')
+    enc_hiddens_target = torch.load('../sanity_check_en_es_data/enc_hiddens.pkl')
+    dec_init_state_target = torch.load('../sanity_check_en_es_data/dec_init_state.pkl')
 
     # Test
     with torch.no_grad():
@@ -153,21 +153,21 @@ def question_1e_sanity_check(model, src_sents, tgt_sents, vocab):
     print ("-"*80)
 
     # Load Inputs
-    dec_init_state = torch.load('./sanity_check_en_es_data/dec_init_state.pkl')
-    enc_hiddens = torch.load('./sanity_check_en_es_data/enc_hiddens.pkl')
-    enc_masks = torch.load('./sanity_check_en_es_data/enc_masks.pkl')
-    target_padded = torch.load('./sanity_check_en_es_data/target_padded.pkl')
+    dec_init_state = torch.load('../sanity_check_en_es_data/dec_init_state.pkl')
+    enc_hiddens = torch.load('../sanity_check_en_es_data/enc_hiddens.pkl')
+    enc_masks = torch.load('../sanity_check_en_es_data/enc_masks.pkl')
+    target_padded = torch.load('../sanity_check_en_es_data/target_padded.pkl')
 
     # Load Outputs
-    combined_outputs_target = torch.load('./sanity_check_en_es_data/combined_outputs.pkl')
+    combined_outputs_target = torch.load('.../sanity_check_en_es_data/combined_outputs.pkl')
     print(combined_outputs_target.shape)
 
     # Configure for Testing
     reinitialize_layers(model)
     COUNTER = [0]
     def stepFunction(Ybar_t, dec_state, enc_hiddens, enc_hiddens_proj, enc_masks):
-       dec_state = torch.load(f'./sanity_check_en_es_data/step_dec_state_{COUNTER[0]}.pkl')
-       o_t = torch.load(f'./sanity_check_en_es_data/step_o_t_{COUNTER[0]}.pkl')
+       dec_state = torch.load(f'../sanity_check_en_es_data/step_dec_state_{COUNTER[0]}.pkl')
+       o_t = torch.load(f'../sanity_check_en_es_data/step_o_t_{COUNTER[0]}.pkl')
        COUNTER[0]+=1
        return dec_state, o_t, None
     model.step = stepFunction
@@ -192,16 +192,16 @@ def question_1f_sanity_check(model, src_sents, tgt_sents, vocab):
     reinitialize_layers(model)
 
     # Inputs
-    Ybar_t = torch.load('./sanity_check_en_es_data/Ybar_t.pkl')
-    dec_init_state = torch.load('./sanity_check_en_es_data/dec_init_state.pkl')
-    enc_hiddens = torch.load('./sanity_check_en_es_data/enc_hiddens.pkl')
-    enc_masks = torch.load('./sanity_check_en_es_data/enc_masks.pkl')
-    enc_hiddens_proj = torch.load('./sanity_check_en_es_data/enc_hiddens_proj.pkl')
+    Ybar_t = torch.load('../sanity_check_en_es_data/Ybar_t.pkl')
+    dec_init_state = torch.load('../sanity_check_en_es_data/dec_init_state.pkl')
+    enc_hiddens = torch.load('../sanity_check_en_es_data/enc_hiddens.pkl')
+    enc_masks = torch.load('../sanity_check_en_es_data/enc_masks.pkl')
+    enc_hiddens_proj = torch.load('../sanity_check_en_es_data/enc_hiddens_proj.pkl')
 
     # Output
-    dec_state_target = torch.load('./sanity_check_en_es_data/dec_state.pkl')
-    o_t_target = torch.load('./sanity_check_en_es_data/o_t.pkl')
-    e_t_target = torch.load('./sanity_check_en_es_data/e_t.pkl')
+    dec_state_target = torch.load('../sanity_check_en_es_data/dec_state.pkl')
+    o_t_target = torch.load('../sanity_check_en_es_data/o_t.pkl')
+    e_t_target = torch.load('../sanity_check_en_es_data/e_t.pkl')
 
     # Run Tests
     with torch.no_grad():
@@ -238,15 +238,15 @@ def main():
     np.random.seed(seed * 13 // 7)
 
     # Load training data & vocabulary
-    train_data_src = autograder_read_corpus('./sanity_check_en_es_data/train_sanity_check.es', 'src')
-    train_data_tgt = autograder_read_corpus('./sanity_check_en_es_data/train_sanity_check.en', 'tgt')
+    train_data_src = autograder_read_corpus('../sanity_check_en_es_data/train_sanity_check.es', 'src')
+    train_data_tgt = autograder_read_corpus('../sanity_check_en_es_data/train_sanity_check.en', 'tgt')
     train_data = list(zip(train_data_src, train_data_tgt))
 
     for src_sents, tgt_sents in batch_iter(train_data, batch_size=BATCH_SIZE, shuffle=True):
         src_sents = src_sents
         tgt_sents = tgt_sents
         break
-    vocab = Vocab.load('./sanity_check_en_es_data/vocab_sanity_check.json') 
+    vocab = Vocab.load('../sanity_check_en_es_data/vocab_sanity_check.json') 
 
     # Create NMT Model
     model = NMT(
